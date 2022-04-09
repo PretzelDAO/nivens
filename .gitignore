@@ -24,4 +24,4 @@ yarn-error.log*
 
 # ide ignore
 nivens.iml
-.idea
+/.idea
