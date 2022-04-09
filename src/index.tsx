@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import DefaultApp from './pages/DefaultApp/DefaultApp';
 import reportWebVitals from './reportWebVitals';
+import {BrowserRouter, Routes, Route, HashRouter} from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Explorer from "./pages/Explorer/Explorer";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <HashRouter>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="explorer" element={<Explorer />} />
+        </Routes>
+    </HashRouter>,
   document.getElementById('root')
 );
 
