@@ -129,6 +129,7 @@ function Explorer() {
                   <Card.Img variant="top" src={collection.image_url} />
                   <Card.Body>
                       <Card.Title>{collection.name}</Card.Title>
+                      <Card.Subtitle>Score: {collection.count}</Card.Subtitle>
                       <Card.Text>
                           {collection.description}
                       </Card.Text>
