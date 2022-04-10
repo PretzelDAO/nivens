@@ -16,12 +16,14 @@ const moralisClient = axios.create({
 
 function Explorer() {
     const [isLoading, setLoadingState] = useState(false);
-    const [collections, setCollections] = useState([])
+    let initialCollectionState:any = []
+    const [collections, setCollections] = useState(initialCollectionState)
     const [targetAddress, setTargetAddress] = useState("0x78f5Fa13864e782D436865CD1c546B58D7C6282E")
 
-    const firstLayerLimit = 2;
-    const secondLayerLimit = 20;
+    const firstLayerLimit = 20;
+    const secondLayerLimit = 100;
     const thirdLayerLimit = 300;
+    const delayMs = 300
 
 
     async function getCollectionsFromOwner(ownerAddress:string,limit:number=10, offset:number=0 ) {
@@ -49,7 +51,18 @@ function Explorer() {
                 "X-API-Key": "keWbehrelmzpPR74s4z6nIez4kBBPeyxLArS7mOvTprXqPnOhiAKkjmDVvOdMcMZ"
             }
         });
+        console.log(response.data)
         return response.data
+    }
+
+    function delay(ms: number) {
+        return new Promise( resolve => setTimeout(resolve, ms) );
+    }
+
+    function updateRelevantCollections(relevantCollectionsAggregator:any[]){
+        relevantCollectionsAggregator=relevantCollectionsAggregator.sort((a,b) => b.count - a.count);
+        setCollections(relevantCollectionsAggregator)
+        return
     }
 
     async function getRelevantCollections (originAddress:string, firstLayerLimitParameter:number =1 , secondLayerLimitParameter:number=1,thirdLayerLimitParameter:number=1) {
@@ -58,8 +71,8 @@ function Explorer() {
         const firstLayerLimit = firstLayerLimitParameter;
         const secondLayerLimit = secondLayerLimitParameter;
         const thirdLayerLimit = thirdLayerLimitParameter;
-        let relevantContracts, relevantOwners, contractAddress, relevantOwnerAddress, relevantCollections, relevantCollectionsAggregator: never[] = []
-
+        let relevantContracts, relevantOwners, contractAddress, relevantOwnerAddress, relevantCollections, relevantCollectionsAggregator: any[] = []
+        let relevantCollectionsCount:any[]
         // Gets all collection contracts of your owned NFTs
         relevantContracts = await getCollectionsFromOwner(originAddress, firstLayerLimit, 0)
         console.log("user contracts:", relevantContracts)
@@ -76,24 +89,21 @@ function Explorer() {
                 if (typeof relevantOwnerAddress  == 'undefined') {console.log('invalid owner Address:',relevantOwners.result[ownerIndex]);continue;}
                 relevantCollections = await getCollectionsFromOwner(relevantOwnerAddress, thirdLayerLimit, 0)
                 relevantCollectionsAggregator = relevantCollectionsAggregator.concat(relevantCollections)
+
+                relevantCollectionsAggregator = [...relevantCollectionsAggregator.reduce((r:any, e:any) => {
+                    let k = `${e.payout_address}`;
+                    if(!r.has(k)) r.set(k, {...e, count: e.count?e.count:1 })
+                    else r.get(k).count++
+                    return r;
+                }, new Map).values()]
+
+                updateRelevantCollections(relevantCollectionsAggregator)
+                await delay(delayMs);
             }
         }
-        let relevantCollectionsCount:any[] = [...relevantCollectionsAggregator.reduce((r:any, e:any) => {
-            let k = `${e.payout_address}`;
-            if(!r.has(k)) r.set(k, {...e, count: 1})
-            else r.get(k).count++
-            return r;
-        }, new Map).values()]
-
-        relevantCollectionsCount=relevantCollectionsCount.sort((a,b) => b.count - a.count);
-
-        console.log(relevantCollectionsCount)
-
-        // @ts-ignore
-        setCollections(relevantCollectionsCount)
 
         setLoadingState(false);
-        return relevantCollectionsCount
+        return
     }
 
     React.useEffect(() => {
@@ -110,7 +120,7 @@ function Explorer() {
           <p>Looking recommendations for Address: {targetAddress}</p>
 
           <InputGroup className="mb-3">
-              <InputGroup.Text id="basic-addon1">Address</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">Hello</InputGroup.Text>
               <FormControl
                   placeholder="0x78f5Fa13864e782D436865CD1c546B58D7C6282E"
                   aria-label="Username"
