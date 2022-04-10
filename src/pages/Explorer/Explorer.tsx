@@ -4,7 +4,8 @@ import './Explorer.css';
 import {Link, Outlet} from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
-import {Button, Card, FormControl, InputGroup, Spinner} from "react-bootstrap";
+import {Button, Card, Col, Container, FormControl, InputGroup, Row, Spinner} from "react-bootstrap";
+import { useMetaMask } from "metamask-react";
 
 const openClient = axios.create({
     baseURL: "https://api.opensea.io/api/v1/"
@@ -15,10 +16,13 @@ const moralisClient = axios.create({
 });
 
 function Explorer() {
+    const { status, connect, account, chainId, ethereum } = useMetaMask();
+
     const [isLoading, setLoadingState] = useState(false);
     let initialCollectionState:any = []
     const [collections, setCollections] = useState(initialCollectionState)
-    const [targetAddress, setTargetAddress] = useState("0x78f5Fa13864e782D436865CD1c546B58D7C6282E")
+    let initialWallet:string = account?account:"0x78f5Fa13864e782D436865CD1c546B58D7C6282E"
+    const [targetAddress, setTargetAddress] = useState(initialWallet)
 
     const firstLayerLimit = 20;
     const secondLayerLimit = 100;
@@ -116,37 +120,44 @@ function Explorer() {
   return (
       <div>
           <NavBar/>
-        <h1>Explorer</h1>
-          <p>Looking recommendations for Address: {targetAddress}</p>
+          <Container>
+              <Row>
+                  <Col>
+                      <h1 style={{fontFamily:"Inter"}} >These NFTs  are the entry gate to your personal rabbit hole</h1>
+                  </Col>
+              </Row>
+              <p>Looking recommendations for Address: {targetAddress}</p>
 
-          <InputGroup className="mb-3">
-              <InputGroup.Text id="basic-addon1">Hello</InputGroup.Text>
-              <FormControl
-                  placeholder="0x78f5Fa13864e782D436865CD1c546B58D7C6282E"
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  value={targetAddress}
-                  onChange={e => setTargetAddress( e.target.value )}
-              />
-          </InputGroup>
-          <button onClick={() => getRelevantCollections(targetAddress,firstLayerLimit,secondLayerLimit,thirdLayerLimit )}>
-              Load Recommendations
-          </button>
-          {isLoading?<Spinner animation="grow" />:""}
-          {collections.map((collection: any) => (
-              <Card style={{ width: '18rem' }} key={collection.slug}
-              >
-                  <Card.Img variant="top" src={collection.image_url} />
-                  <Card.Body>
-                      <Card.Title>{collection.name}</Card.Title>
-                      <Card.Subtitle>Score: {collection.count}</Card.Subtitle>
-                      <Card.Text>
-                          {collection.description}
-                      </Card.Text>
-                      <Button variant="primary" href={collection.external_url} target="_blank">Check website</Button>
-                  </Card.Body>
-              </Card>
-          ))}
+              <InputGroup className="mb-3">
+                  <InputGroup.Text id="basic-addon1">Hello</InputGroup.Text>
+                  <FormControl
+                      placeholder="0x78f5Fa13864e782D436865CD1c546B58D7C6282E"
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      value={targetAddress}
+                      onChange={e => setTargetAddress( e.target.value )}
+                  />
+              </InputGroup>
+              <button onClick={() => getRelevantCollections(targetAddress,firstLayerLimit,secondLayerLimit,thirdLayerLimit )}>
+                  Load Recommendations
+              </button>
+              {isLoading?<Spinner animation="grow" />:""}
+              {collections.map((collection: any) => (
+                  <Card style={{ width: '18rem' }} key={collection.slug}
+                  >
+                      <Card.Img variant="top" src={collection.image_url} />
+                      <Card.Body>
+                          <Card.Title>{collection.name}</Card.Title>
+                          <Card.Subtitle>Score: {collection.count}</Card.Subtitle>
+                          <Card.Text>
+                              {collection.description}
+                          </Card.Text>
+                          <Button variant="primary" href={collection.external_url} target="_blank">Check website</Button>
+                      </Card.Body>
+                  </Card>
+              ))}
+          </Container>
+
       </div>
   );
 }

@@ -1,11 +1,14 @@
 import React from 'react';
-import logo from './../logo.svg';
+import logo from './../img.png';
 import {Link, Outlet} from "react-router-dom";
 import {Button, Container, Nav, Navbar} from "react-bootstrap"
+import { useMetaMask } from "metamask-react";
 
 function NavBar() {
+    const { status, connect, account, chainId, ethereum } = useMetaMask();
+
     return (
-        <Navbar bg="dark" variant="dark">
+        <Navbar bg="primary" color={"1D1948"} >
             <Container>
                 <Navbar.Brand href="#/">
                     <img
@@ -15,11 +18,9 @@ function NavBar() {
                         height="30"
                         className="d-inline-block align-top"
                     />{' '}
-                    Nivens
                 </Navbar.Brand>
-                <Nav className="me-auto">
-                    <Nav.Link href="#/">Home</Nav.Link>
-                    <Nav.Link href="#/explorer">Explorer</Nav.Link>
+                <Nav  className="justify-content-end">
+                    {     (status === "notConnected")?  <Button onClick={connect}>Connect to MetaMask</Button>:<Button onClick={connect}>Connected</Button>}
                 </Nav>
             </Container>
         </Navbar>

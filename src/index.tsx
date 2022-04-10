@@ -7,6 +7,8 @@ import {BrowserRouter, Routes, Route, HashRouter} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Explorer from "./pages/Explorer/Explorer";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { MetaMaskProvider } from "metamask-react";
+import './custom.scss';
 
 function AppWithCallbackAfterRender() {
     useEffect(() => {
@@ -14,12 +16,15 @@ function AppWithCallbackAfterRender() {
     });
 
     return (
-    <HashRouter>
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="explorer" element={<Explorer />} />
-        </Routes>
-    </HashRouter>)
+        <MetaMaskProvider>
+            <HashRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="explorer" element={<Explorer />} />
+            </Routes>
+        </HashRouter>
+        </MetaMaskProvider>
+    )
 }
 
 const container = document.getElementById('root');
