@@ -26,7 +26,7 @@ function NavBar() {
                     />{' '}
                 </Navbar.Brand>
                 <Nav  className="justify-content-end">
-                    {     (status === "notConnected")?  <Button className="Gradient-Button" onClick={()=>connect().then(()=>navigate("/explorergig"))}>Connect to MetaMask</Button>:<Button className="Gradient-Button">Metamask Connected</Button>}
+                    {     (status === "notConnected")?  <Button className="Gradient-Button" onClick={()=>connect().then(()=>navigate("/explorer"))}>Connect to MetaMask</Button>:<Button className="Gradient-Button">Metamask Connected</Button>}
                     {     (twitterStatus === "notConnected")?  <Button className="Gradient-Button" onClick={handleShow}>Connect to Twitter</Button>:<Button className="Gradient-Button">Twitter Connected</Button>}
                     <Link to="/explorer">
                         <Button variant="primary" style={{border: "1px solid #F8F9FA",
