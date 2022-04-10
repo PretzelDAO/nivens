@@ -1,0 +1,4 @@
+.Gradient-Button{
+    background: linear-gradient(90deg, #FF1654 0%, #0077FF 51.04%, #00E0AC 100%);
+    mixBlendMode: hard-light
+}

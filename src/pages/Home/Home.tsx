@@ -10,14 +10,15 @@ function Home() {
       <div>
           <NavBar/>
         <h1>Homepage</h1>
-          <Button variant="primary">Button Example</Button>
           <nav
             style={{
               borderBottom: "solid 1px",
               paddingBottom: "1rem",
             }}
         >
-          <Link to="/explorer">Explorer</Link> |{" "}
+          <Link to="/explorer">
+              <Button variant="primary">Jump in</Button>
+          </Link>
         </nav>
         <Outlet />
       </div>

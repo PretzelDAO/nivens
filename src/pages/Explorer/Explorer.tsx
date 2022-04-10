@@ -4,7 +4,7 @@ import './Explorer.css';
 import {Link, Outlet} from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
-import {Button, Card, Col, Container, FormControl, InputGroup, Row, Spinner} from "react-bootstrap";
+import {Button, Card, CardGroup, Col, Container, FormControl, InputGroup, Row, Spinner} from "react-bootstrap";
 import { useMetaMask } from "metamask-react";
 
 const openClient = axios.create({
@@ -120,42 +120,57 @@ function Explorer() {
   return (
       <div>
           <NavBar/>
-          <Container>
-              <Row>
+          <Container >
+              <Row className="mt-5">
                   <Col>
-                      <h1 style={{fontFamily:"Inter"}} >These NFTs  are the entry gate to your personal rabbit hole</h1>
+                      <h2 className="fw-bold" style={{fontFamily:"Inter"}} >These NFTs  are the entry gate to your personal rabbit hole</h2>
                   </Col>
               </Row>
-              <p>Looking recommendations for Address: {targetAddress}</p>
+              <Row>
+                  <p>Looking recommendations for Address: {targetAddress}</p>
+              </Row>
+              <Row>
+                  <InputGroup className="mb-3">
+                      <InputGroup.Text id="basic-addon1" style={{backgroundColor:"black"}}>Target Address</InputGroup.Text>
+                      <FormControl
+                          style={{backgroundColor:"gray"}}
+                          placeholder={initialWallet}
+                          aria-label="Username"
+                          aria-describedby="basic-addon1"
+                          value={targetAddress}
+                          onChange={e => setTargetAddress( e.target.value )}
+                      />
+                      <Button variant="light" onClick={() => setTargetAddress(account?account:"Metamask connection required")}>
+                          Load My Wallet
+                      </Button>
+                  </InputGroup>
+                  <Button variant={"light"}
+                      onClick={() => getRelevantCollections(targetAddress,firstLayerLimit,secondLayerLimit,thirdLayerLimit )}>
+                      Load Recommendations
+                  </Button>
+              </Row>
+              <Row  className="g-4 mt-5">
+                  {isLoading?<Spinner animation="grow" />:""}
+                  {collections.map((collection: any) => (
+                      <Col>
+                      <Card style={{ width: '18rem', maxHeight: '25rem'}} key={collection.slug}
+                      >
+                            <div style={{display:"block", height:"12rem",lineHeight:"12rem",overflow:"hidden"}}>
+                          <Card.Img variant="top" src={collection.featured_image_url?collection.featured_image_url:collection.image_url} style={{position:"relative",margin:"-50% auto", maxWidth:"100% auto", height:"auto"}} />
+                      </div>
+                          <Card.Body>
+                              <Card.Title>{collection.name}</Card.Title>
+                              <Card.Subtitle>Score: {collection.count}</Card.Subtitle>
+                              <Card.Text style={{overflow:"hidden", maxHeight:'5rem'}}>
+                                  {collection.description}
+                              </Card.Text>
+                              <Button variant="primary" href={collection.external_url} target="_blank">Check website</Button>
+                          </Card.Body>
+                      </Card>
+                      </Col>
+                  ))}
+              </Row>
 
-              <InputGroup className="mb-3">
-                  <InputGroup.Text id="basic-addon1">Hello</InputGroup.Text>
-                  <FormControl
-                      placeholder="0x78f5Fa13864e782D436865CD1c546B58D7C6282E"
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
-                      value={targetAddress}
-                      onChange={e => setTargetAddress( e.target.value )}
-                  />
-              </InputGroup>
-              <button onClick={() => getRelevantCollections(targetAddress,firstLayerLimit,secondLayerLimit,thirdLayerLimit )}>
-                  Load Recommendations
-              </button>
-              {isLoading?<Spinner animation="grow" />:""}
-              {collections.map((collection: any) => (
-                  <Card style={{ width: '18rem' }} key={collection.slug}
-                  >
-                      <Card.Img variant="top" src={collection.image_url} />
-                      <Card.Body>
-                          <Card.Title>{collection.name}</Card.Title>
-                          <Card.Subtitle>Score: {collection.count}</Card.Subtitle>
-                          <Card.Text>
-                              {collection.description}
-                          </Card.Text>
-                          <Button variant="primary" href={collection.external_url} target="_blank">Check website</Button>
-                      </Card.Body>
-                  </Card>
-              ))}
           </Container>
 
       </div>
