@@ -153,7 +153,7 @@ function Explorer() {
                   {isLoading?<Spinner animation="grow" />:""}
                   {collections.map((collection: any) => (
                       <Col>
-                      <Card style={{ width: '18rem', maxHeight: '25rem'}} key={collection.slug}
+                      <Card style={{ width: '18rem', height: '25rem'}} key={collection.slug}
                       >
                             <div style={{display:"block", height:"12rem",lineHeight:"12rem",overflow:"hidden"}}>
                           <Card.Img variant="top" src={collection.featured_image_url?collection.featured_image_url:collection.image_url} style={{position:"relative",margin:"-50% auto", maxWidth:"100% auto", height:"auto"}} />
