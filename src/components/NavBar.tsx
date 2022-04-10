@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import logo from './../img.png';
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useNavigate } from "react-router-dom";
 import {Button, Container, Modal, Nav, Navbar} from "react-bootstrap"
 import { useMetaMask } from "metamask-react";
 import './NavBar.css'
@@ -10,10 +10,12 @@ function NavBar() {
     const [showTwitterModal, setShowTwitterModal] = useState(false)
     const handleClose = () => setShowTwitterModal(false);
     const handleShow = () => setShowTwitterModal(true);
+    let navigate = useNavigate();
+
     const twitterStatus="notConnected"
     return (
-        <Navbar bg="primary" color={"1D1948"} >
-            <Container >
+        <Navbar bg="primary" color={"1D1948"}>
+            <Container>
                 <Navbar.Brand href="#/">
                     <img
                         alt=""
@@ -24,7 +26,7 @@ function NavBar() {
                     />{' '}
                 </Navbar.Brand>
                 <Nav  className="justify-content-end">
-                    {     (status === "notConnected")?  <Button className="Gradient-Button" onClick={connect}>Connect to MetaMask</Button>:<Button className="Gradient-Button">Metamask Connected</Button>}
+                    {     (status === "notConnected")?  <Button className="Gradient-Button" onClick={()=>connect().then(()=>navigate("/explorergig"))}>Connect to MetaMask</Button>:<Button className="Gradient-Button">Metamask Connected</Button>}
                     {     (twitterStatus === "notConnected")?  <Button className="Gradient-Button" onClick={handleShow}>Connect to Twitter</Button>:<Button className="Gradient-Button">Twitter Connected</Button>}
                     <Modal show={showTwitterModal} onHide={handleClose}>
                         <Modal.Header closeButton>
