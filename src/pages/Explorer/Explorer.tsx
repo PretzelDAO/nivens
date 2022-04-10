@@ -90,7 +90,7 @@ function Explorer() {
             for (let ownerIndex = 0; ownerIndex < relevantOwners.result?.length; ownerIndex++) {
                 console.log("Owner analysis counter:" + (ownerIndex + 1) + "/" + relevantOwners.result?.length)
                 relevantOwnerAddress = relevantOwners.result[ownerIndex]?.owner_of
-                if (typeof relevantOwnerAddress  == 'undefined') {console.log('invalid owner Address:',relevantOwners.result[ownerIndex]);continue;}
+                if (typeof relevantOwnerAddress  == 'undefined' || relevantOwnerAddress == "0x000000000000000000000000000000000000dead") {console.log('invalid owner Address:',relevantOwners.result[ownerIndex]);continue;}
                 relevantCollections = await getCollectionsFromOwner(relevantOwnerAddress, thirdLayerLimit, 0)
                 relevantCollectionsAggregator = relevantCollectionsAggregator.concat(relevantCollections)
 
@@ -144,16 +144,28 @@ function Explorer() {
                           Load My Wallet
                       </Button>
                   </InputGroup>
-                  <Button variant={"light"}
-                      onClick={() => getRelevantCollections(targetAddress,firstLayerLimit,secondLayerLimit,thirdLayerLimit )}>
-                      Load Recommendations
-                  </Button>
+
+                  { isLoading?
+                      <Button variant="light" >
+                          <Spinner
+                              as="span"
+                              animation="border"
+                              size="sm"
+                              role="status"
+                              aria-hidden="true"
+                          />
+                          <span >Loading... {collections.length} Collections </span>
+                      </Button> :
+                      <Button variant="light"
+                              onClick={() => getRelevantCollections(targetAddress,firstLayerLimit,secondLayerLimit,thirdLayerLimit )}>
+                          Load Recommendations
+                      </Button>
+                  }
               </Row>
               <Row  className="g-4 mt-5">
-                  {isLoading?<Spinner animation="grow" />:""}
                   {collections.map((collection: any) => (
-                      <Col>
-                      <Card style={{ width: '18rem', height: '25rem'}} key={collection.slug}
+                      <Col key={collection.slug}>
+                      <Card style={{ width: '18rem', height: '25rem'}}
                       >
                             <div style={{display:"block", height:"12rem",lineHeight:"12rem",overflow:"hidden"}}>
                           <Card.Img variant="top" src={collection.featured_image_url?collection.featured_image_url:collection.image_url} style={{position:"relative",margin:"-50% auto", maxWidth:"100% auto", height:"auto"}} />
