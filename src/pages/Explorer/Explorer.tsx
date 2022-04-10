@@ -64,6 +64,7 @@ function Explorer() {
     }
 
     function updateRelevantCollections(relevantCollectionsAggregator:any[]){
+        console.log(relevantCollectionsAggregator)
         relevantCollectionsAggregator=relevantCollectionsAggregator.sort((a,b) => b.count - a.count);
         setCollections(relevantCollectionsAggregator)
         return
@@ -171,12 +172,16 @@ function Explorer() {
                           <Card.Img variant="top" src={collection.featured_image_url?collection.featured_image_url:collection.image_url} style={{position:"relative",margin:"-50% auto", maxWidth:"100% auto", height:"auto"}} />
                       </div>
                           <Card.Body>
-                              <Card.Title>{collection.name}</Card.Title>
-                              <Card.Subtitle>Score: {collection.count}</Card.Subtitle>
-                              <Card.Text style={{overflow:"hidden", maxHeight:'5rem'}}>
+                              <Card.Title style={{color:"#152536"}}>{collection.name}</Card.Title>
+                              <Card.Text style={{overflow:"scroll", height:'5rem', color:"#152536"}}>
                                   {collection.description}
                               </Card.Text>
-                              <Button variant="primary" href={collection.external_url} target="_blank">Check website</Button>
+                              <Card.Subtitle style={{color:"#152536"}}>Score: {collection.count}</Card.Subtitle>
+
+                              <Button variant="primary" disabled={!collection.external_url} href={collection.external_url} target="_blank"> Website</Button>
+                              <Button variant="primary" disabled={collection.name=='undefined'} href={"https://opensea.io/assets?search[query]="+encodeURIComponent(collection.name)} target="_blank">OpenSea</Button>
+                              <Button variant="primary" disabled={!collection?.twitter_username} href={"https://twitter.com/"+encodeURIComponent(collection.twitter_username)} target={collection?.twitter_username?'_blank':undefined}>Twitter</Button>
+
                           </Card.Body>
                       </Card>
                       </Col>
