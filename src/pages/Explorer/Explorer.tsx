@@ -21,7 +21,7 @@ function Explorer() {
     const [isLoading, setLoadingState] = useState(false);
     let initialCollectionState:any = []
     const [collections, setCollections] = useState(initialCollectionState)
-    let initialWallet:string = account?account:"0x78f5Fa13864e782D436865CD1c546B58D7C6282E"
+    let initialWallet:string = account?account:"0xce90a7949bb78892f159f428d0dc23a8e3584d75"
     const [targetAddress, setTargetAddress] = useState(initialWallet)
 
     const firstLayerLimit = 20;
@@ -115,7 +115,6 @@ function Explorer() {
         const firstLayerLimit = 1;
         const secondLayerLimit = 1;
         const thirdLayerLimit = 1;
-        // getRelevantCollections("0xB96D03ceeCc1018E07d2BC111eDF354b40dA8DA9",firstLayerLimit,secondLayerLimit,thirdLayerLimit )
     }, []);
 
   return (
